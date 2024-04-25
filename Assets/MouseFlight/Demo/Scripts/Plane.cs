@@ -21,7 +21,8 @@ namespace MFlight.Demo
         [SerializeField] private MouseFlightController controller = null;
 
         [Header("Physics")]
-        [Tooltip("Force to push plane forwards with")] public float thrust = 100f;
+        [Tooltip("Force to push plane forwards with")] public float minThrust = 100f;
+        [Tooltip("Throttle")] public float maximumThrust = 500f;
         [Tooltip("Pitch, Yaw, Roll")] public Vector3 turnTorque = new Vector3(90f, 25f, 45f);
         [Tooltip("Multiplier for all forces")] public float forceMult = 1000f;
 
@@ -33,10 +34,13 @@ namespace MFlight.Demo
         [SerializeField] [Range(-1f, 1f)] private float pitch = 0f;
         [SerializeField] [Range(-1f, 1f)] private float yaw = 0f;
         [SerializeField] [Range(-1f, 1f)] private float roll = 0f;
+        [SerializeField] [Range(0f, 1f)] private float throttle = 0f;
+
 
         public float Pitch { set { pitch = Mathf.Clamp(value, -1f, 1f); } get { return pitch; } }
         public float Yaw { set { yaw = Mathf.Clamp(value, -1f, 1f); } get { return yaw; } }
         public float Roll { set { roll = Mathf.Clamp(value, -1f, 1f); } get { return roll; } }
+        public float Throttle { set { throttle = Mathf.Clamp(value, 0f, 1f); } get { return throttle; } }
 
         private Rigidbody rigid;
 
@@ -71,7 +75,7 @@ namespace MFlight.Demo
                 rollOverride = true;
             }
 
-            // Calculate the autopilot stick inputs.
+            //Calculate the autopilot stick inputs.
             float autoYaw = 0f;
             float autoPitch = 0f;
             float autoRoll = 0f;
@@ -133,7 +137,7 @@ namespace MFlight.Demo
         {
             // Ultra simple flight where the plane just gets pushed forward and manipulated
             // with torques to turn.
-            rigid.AddRelativeForce(Vector3.forward * thrust * forceMult, ForceMode.Force);
+            rigid.AddRelativeForce(Vector3.forward * (minThrust  + (maximumThrust * Throttle)) * forceMult, ForceMode.Force);
             rigid.AddRelativeTorque(new Vector3(turnTorque.x * pitch,
                                                 turnTorque.y * yaw,
                                                 -turnTorque.z * roll) * forceMult,
