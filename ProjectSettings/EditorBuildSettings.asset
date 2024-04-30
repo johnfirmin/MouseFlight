@@ -4,7 +4,10 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/MouseFlight/Demo/Scenes/DemoFlight.unity
+    guid: 20dddf1c73edf8b43a45ac49c16cb892
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: f897fe91a134c324e808467c260c0f73,
       type: 2}

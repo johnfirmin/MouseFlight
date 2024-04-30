@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-namespace Assets.MouseFlight.Demo.Scripts
+namespace MFlight.Demo
 {
     public static class Utilities
     {

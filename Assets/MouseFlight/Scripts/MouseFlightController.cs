@@ -5,7 +5,7 @@
 
 using UnityEngine;
 
-namespace MFlight
+namespace MFlight.Demo
 {
     /// <summary>
     /// Combination of camera rig and controller for aircraft. Requires a properly set
@@ -32,6 +32,10 @@ namespace MFlight
 
         [SerializeField] [Tooltip("Mouse sensitivity for the mouse flight target")]
         private float mouseSensitivity = 3f;
+
+        [SerializeField]
+        [Tooltip("Mouse sensitivity for the mouse flight target")]
+        private float keyboardSensitivity = 1f;
 
         [SerializeField] [Tooltip("How far the boresight and mouse flight are from the aircraft")]
         private float aimDistance = 500f;
@@ -146,6 +150,17 @@ namespace MFlight
                                       Quaternion.LookRotation(mouseAim.forward, upVec),
                                       camSmoothSpeed,
                                       Time.deltaTime);
+        }
+
+        public void AdjustAim(float yaw, float pitch, float roll)
+        {
+            float mouseX = yaw * keyboardSensitivity;
+            float mouseY = pitch * keyboardSensitivity;
+
+            // Rotate the aim target that the plane is meant to fly towards.
+            // Use the camera's axes in world space so that mouse motion is intuitive.
+            mouseAim.Rotate(cam.right, mouseY, Space.World);
+            mouseAim.Rotate(cam.up, mouseX, Space.World);
         }
 
         private Vector3 GetFrozenMouseAimPos()
